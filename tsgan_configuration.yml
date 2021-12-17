@@ -1,0 +1,35 @@
+fit : True                          #set to True when fitting/training, False for generating new data
+sample_new_data : False             #set to False when fitting/training, True for generating new data
+dataset:
+    class : ts
+    path  : ./data/                 #dir with data
+    filename : RHHBY.csv            #input file
+    datetime_col  : Date            # datetime column
+    value_col : Close               # value column
+    time_window : 30                # time window
+workers : 0                         #number of data loading workers
+batch_size : 16                     #input batch size
+nz: 100                             #dimensionality of the latent vector z
+epochs : 70                         #number of epochs to train for
+lr : 0.0002                         #learning rate
+cuda : True                         #enables cuda
+netG_path :    '' #'checkpoints/netG_test_CNN_dis_LSTM_gen_1hourtw_deltaminmax_epoch_35.pth'                        #path to netG (to continue training)
+netD_path :    '' #'checkpoints/netD_test_CNN_dis_LSTM_gen_1hourtw_deltaminmax_epoch_35.pth'                        #path to netD (to continue training)
+outf : checkpoints                  #folder to save checkpoints
+imf : images                        #folder to save images
+logdir : log                        #logdir for tensorboard
+run_tag : test_CNN_dis_LSTM_gen     #tags for the current run
+checkpoint_every : 5                #number of epochs after which saving checkpoints
+tensorboard_image_every : 5         #interval for displaying images on tensorboard 
+delta_condition : True              #whether to use the mse loss for deltas
+delta_lambda : 10                   #weight for the delta condition
+alternate : True                    #whether to alternate between adversarial and mse loss in generator
+dis_type : cnn                      #choices=['cnn','lstm'], architecture to be used for discriminator to use
+gen_type : lstm                     #choices=['cnn','lstm'], architecture to be used for generator to use
+#output_path : ./output
+deltas : [0.1, 0.2, 0.3, 0.05]      #deltas for generation, if only one value a number=size of sequences (length = time_window) will be created, if multiple values a sequence per value will be created
+size : 100                          #in case of generation with only one delta value size is the number of sequences generated, otherwise it is not used. If generation without delta it is the length of the sequence.
+outfile : ./test_CNN_dis_LSTM_gen.npy
+
+
+
