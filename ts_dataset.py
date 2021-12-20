@@ -6,24 +6,21 @@ import numpy as np
 
 class TSDataset(Dataset):
     """Time series dataset."""
-    def __init__(self, csv_file, timestamp_col, value_col, time_window, normalize=True):
+    def __init__(self, csv_file, value_col, time_window, normalize=True):
         """
         Args:
             csv_file (string): path to csv file
-            timestamp_col: name of the column containing timestamp
             value_col: name of the column containing values 
             time_window: time window to consider for conditioning/generation
             normalize (bool): whether to normalize the data in [-1,1]
         """
         df = pd.read_csv(csv_file)
-        df = df.filter([timestamp_col, value_col], axis=1)
+        df = df.filter([value_col], axis=1)
         df.rename(columns={value_col:'Value'}, inplace = True)
-        df['Timestamp'] = pd.to_datetime(df[timestamp_col].map(str))
-        df = df.drop([timestamp_col], axis=1).set_index('Timestamp')
         
         n = (len(df)//time_window) * time_window
         value = df.Value
-        arr = np.asarray([value[time_window*i:time_window*i+time_window] for i in range (n//time_window)], dtype=np.float32)
+        arr = np.asarray([value[time_window*i:time_window*i+time_window] for i in range(n//time_window)], dtype=np.float32)
         data = torch.from_numpy(np.expand_dims(arr, -1))
         self.data = self.normalize(data) if normalize else data
         self.seq_len = data.size(1)

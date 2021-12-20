@@ -3,10 +3,10 @@ sample_new_data : False             #set to False when fitting/training, True fo
 dataset:
     class : ts
     path  : ./data/                 #dir with data
-    filename : RHHBY.csv            #input file
+    filename : Norm1.csv            #input file
     datetime_col  : Date            # datetime column
-    value_col : Close               # value column
-    time_window : 30                # time window
+    value_col : DE               # value column
+    time_window : 400                # time window
 workers : 0                         #number of data loading workers
 batch_size : 16                     #input batch size
 nz: 100                             #dimensionality of the latent vector z

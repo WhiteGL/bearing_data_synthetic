@@ -116,22 +116,15 @@ class TSGANSynthetiser:
         value_col = self.config['dataset']['value_col']
         time_window = self.config['dataset']['time_window'] 
         self.seq_len = time_window   #same as the first dimension of a sequence in the dataset self.dataset[0].size(0) 
-        self.dataset = TSDataset(csv_file=path_file, 
-                                timestamp_col=datetime_col, 
-                                value_col=value_col, 
-                                time_window=time_window, 
-                                normalize=True)
+        self.dataset = TSDataset(csv_file=path_file, value_col=value_col, time_window=time_window, normalize=True)
     
     
     def fit(self):
         """Fit the CTSGAN Synthesizer models to the training data.
         """
 
-        dataloader = torch.utils.data.DataLoader(self.dataset, 
-                                                batch_size=self.batch_size, 
-                                                shuffle=True,
-                                                num_workers=int(self.workers))
-
+        dataloader = torch.utils.data.DataLoader(self.dataset, batch_size=self.batch_size, shuffle=True,
+                                                 num_workers=int(self.workers))
 
         criterion = nn.BCELoss().to(self.device)
         delta_criterion = nn.MSELoss().to(self.device)     
