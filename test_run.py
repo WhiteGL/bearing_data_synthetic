@@ -27,7 +27,7 @@ date = datetime.datetime.now().strftime("%d-%m-%y_%H:%M")
 run_name = f"{config['run_tag']}_{date}" if config['run_tag'] != '' else date
 #log_dir_name = os.path.join(config['logdir'], run_name)
 log_dir_name = config['logdir']
-writer = SummaryWriter(log_dir_name)
+writer = SummaryWriter(log_dir_name+'/'+datetime.datetime.now().strftime("%d-%m-%y_%H_%M"))
 
 try:
     os.makedirs(config['outf'])

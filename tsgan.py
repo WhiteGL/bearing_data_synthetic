@@ -31,7 +31,7 @@ class TSGANSynthetiser:
             path_to_yaml (string) : path to yml configuration file
         """
         try: 
-            with open (path_to_yaml, 'r') as file:
+            with open(path_to_yaml, 'r') as file:
                 self.config = yaml.safe_load(file)
         except Exception:
             print('Error reading the config file')
@@ -127,7 +127,7 @@ class TSGANSynthetiser:
                                                  num_workers=int(self.workers))
 
         criterion = nn.BCELoss().to(self.device)
-        delta_criterion = nn.MSELoss().to(self.device)     
+        delta_criterion = nn.MSELoss().to(self.device)
 
         #Generate fixed noise to be used for visualization
         fixed_noise = torch.randn(self.batch_size, 
@@ -319,7 +319,7 @@ class TSGANSynthetiser:
             out_tensor = self.dataset.denormalize(out_tensor)
  
         if self.outfile:
-            np.save(self.outfile, out_tensor.detach().numpy())
+            np.save(self.outfile+datetime.datetime.now().strftime("%H_%M")+".npy", out_tensor.detach().numpy())
         
         return out_tensor.squeeze().detach().numpy()
 
