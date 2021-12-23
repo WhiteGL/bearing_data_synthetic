@@ -298,7 +298,7 @@ class TSGANSynthetiser:
 
         #If conditional generation is required, then input for generator must contain deltas
         if delta_list:
-            if len(delta_list)==1:
+            if len(delta_list) == 1:
                 delta_list = delta_list * n
             noise = torch.randn(len(delta_list), self.seq_len, self.nz) 
             deltas = torch.FloatTensor(delta_list).view(-1, 1, 1).repeat(1, self.seq_len, 1)
@@ -311,7 +311,7 @@ class TSGANSynthetiser:
         
         out_list = []
         for batch in noise.split(self.batch_size):
-            out_list.append(self.netG(batch))
+            out_list.append(self.netG(batch.cuda()))
         out_tensor = torch.cat(out_list, dim=0)
          
         #Puts generated sequences in original range
@@ -319,9 +319,9 @@ class TSGANSynthetiser:
             out_tensor = self.dataset.denormalize(out_tensor)
  
         if self.outfile:
-            np.save(self.outfile+datetime.datetime.now().strftime("%H_%M")+".npy", out_tensor.detach().numpy())
+            np.save(self.outfile+datetime.datetime.now().strftime("%H_%M")+".npy", out_tensor.cpu().detach().numpy())
         
-        return out_tensor.squeeze().detach().numpy()
+        return out_tensor.squeeze().detach().cpu().numpy()
 
     
     def time_series_to_plot(self, time_series_batch, dpi=35, feature_idx=0, n_images_per_row=4, titles=None):
